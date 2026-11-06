@@ -10,12 +10,14 @@
 
 ## 必要な道具
 
-- (技術を決めたら、言語・ツール・アプリ・連携と、その版をここに書く。新しく入れたものも追記する)
+- Node.js 26 / npm 12、Next.js 16、React 19、TypeScript、Tailwind CSS 4、Drizzle ORM、libSQL、Vitest
+- 外部公開・Cloudflare・D1・実アプリの環境変数は禁止。`127.0.0.1` と `data/ajito-security-lab.db` だけを使う。
 
 ## コマンド
 
 - 一括検証: `pwsh -NoProfile -File scripts/codex-verify.ps1`
-- (技術を決めたら、ビルド・テスト・lint・開発サーバーのコマンドをここに追記する)
+- 開発: `npm run dev` (http://127.0.0.1:3227)
+- 初期化: `npm run db:reset` / テスト: `npm test` / 型: `npm run typecheck` / lint: `npm run lint` / build: `npm run build`
 
 ## 共有Vault
 

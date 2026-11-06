@@ -1,0 +1,1 @@
+ALTER TABLE `notifications` ADD `comment_id` text;

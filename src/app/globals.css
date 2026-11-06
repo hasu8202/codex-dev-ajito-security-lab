@@ -1,0 +1,694 @@
+@import "tailwindcss";
+
+/*
+ * 英国紳士が営む、地下の情報屋。
+ * 黒緑の革張りの机にランプの灯。その上に羊皮紙の書類、真鍮の金具、ワイン色の封蝋。
+ * 色・書体・影・質感はここのトークンだけを使う(画面ごとに色を足さない)。
+ */
+
+:root {
+  /* 夜の地(革張りの机) */
+  --night: #0d1a16;
+  --night-deep: #08110e;
+  --panel: #13241e;
+  --panel-hi: #1a2e27;
+  --rule: #2b4238;
+  --rule-hi: #415a4f;
+  /* 夜の地の上の文字(羊皮紙のクリーム) */
+  --cream: #ece2c8;
+  --cream-dim: #aea78f;
+  /* 真鍮 */
+  --brass: #c9a55c;
+  --brass-hi: #e8c97f;
+  --brass-lo: #8a6a2a;
+  /* 差し色: くすんだワイン。文字に使うときは wine-hi */
+  --wine: #7e2636;
+  --wine-hi: #d68792;
+  /* 書類(紙)とその上の文字 */
+  /* 黄味を抑えた、少し古びた紙。暗い机の上で眩しくならない明るさにとどめる */
+  --parch: #d8ceb6;
+  --parch-hi: #e3dac5;
+  --parch-lo: #c9bc9f;
+  --newsprint: #cfc9b8;
+  --parch-ink: #2a2117;
+  --parch-dim: #54462f;
+  --parch-rule: #b9a780;
+  --parch-accent: #5f4614;
+
+  /* 影 */
+  /* 紙: 縁をわずかに焼いて沈め、柔らかい落ち影と、ランプのごく淡い照り返しで地となじませる */
+  --shadow-paper:
+    inset 0 1px 0 rgb(255 255 255 / 0.28), inset 0 0 36px rgb(92 66 30 / 0.2), 0 0 0 1px rgb(0 0 0 / 0.28), 0 3px 8px rgb(0 0 0 / 0.32),
+    0 22px 44px -14px rgb(0 0 0 / 0.75), 0 0 48px -4px rgb(232 201 127 / 0.07);
+  --shadow-plate: inset 0 1px 0 rgb(255 255 255 / 0.5), inset 0 -1px 0 rgb(0 0 0 / 0.3), 0 1px 2px rgb(0 0 0 / 0.55);
+  --shadow-glow: 0 0 0 1px rgb(232 201 127 / 0.55), 0 0 22px rgb(232 201 127 / 0.32);
+  --shadow-inset: inset 0 1px 3px rgb(0 0 0 / 0.45);
+
+  /* 余白 */
+  --gutter: 1rem;
+
+  /* 質感: SVG のノイズ(画像ファイルは使わない) */
+  --grain-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .93 0 0 0 0 .89 0 0 0 0 .78 0 0 0 .9 -.38'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  --grain-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .32 0 0 0 0 .24 0 0 0 0 .13 0 0 0 .75 -.3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+
+  color-scheme: dark;
+}
+
+@media (min-width: 40rem) {
+  :root {
+    --gutter: 1.5rem;
+  }
+}
+
+@theme inline {
+  --color-night: var(--night);
+  --color-night-deep: var(--night-deep);
+  --color-panel: var(--panel);
+  --color-panel-hi: var(--panel-hi);
+  --color-rule: var(--rule);
+  --color-rule-hi: var(--rule-hi);
+  --color-cream: var(--cream);
+  --color-cream-dim: var(--cream-dim);
+  --color-brass: var(--brass);
+  --color-brass-hi: var(--brass-hi);
+  --color-brass-lo: var(--brass-lo);
+  --color-wine: var(--wine);
+  --color-wine-hi: var(--wine-hi);
+  --color-parch: var(--parch);
+  --color-parch-hi: var(--parch-hi);
+  --color-parch-lo: var(--parch-lo);
+  --color-parch-ink: var(--parch-ink);
+  --color-parch-dim: var(--parch-dim);
+  --color-parch-rule: var(--parch-rule);
+  --color-parch-accent: var(--parch-accent);
+  --font-display: var(--font-mincho), "Hiragino Mincho ProN", "Yu Mincho", serif;
+  --font-latin: var(--font-cormorant), "Times New Roman", serif;
+  --font-sans: var(--font-noto-serif), "Hiragino Mincho ProN", "Yu Mincho", serif;
+  --radius-sm: 2px;
+  --spacing-gutter: var(--gutter);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  background-color: var(--night);
+}
+
+body {
+  position: relative;
+  background-color: var(--night);
+  color: var(--cream);
+  font-family: var(--font-sans);
+  line-height: 1.8;
+  font-feature-settings: "palt" 1;
+  /* 日本語を文節の途中で折り返さない */
+  word-break: auto-phrase;
+}
+
+/* 机の地: ビネット(四隅を暗く)+布目+ノイズ */
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+body::before {
+  background:
+    radial-gradient(ellipse 120% 95% at 45% 40%, transparent 45%, rgb(0 0 0 / 0.6) 100%),
+    var(--grain-light),
+    repeating-linear-gradient(90deg, rgb(255 255 255 / 0.014) 0 1px, transparent 1px 4px),
+    repeating-linear-gradient(0deg, rgb(0 0 0 / 0.06) 0 1px, transparent 1px 3px);
+}
+/* 左上のランプの灯。ゆっくり揺らぐ */
+body::after {
+  background:
+    radial-gradient(ellipse 70% 55% at 6% -8%, rgb(232 201 127 / 0.17), transparent 70%),
+    radial-gradient(ellipse 45% 35% at 100% 110%, rgb(126 38 54 / 0.12), transparent 70%);
+  animation: lamp 11s ease-in-out infinite alternate;
+  will-change: opacity;
+}
+@keyframes lamp {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  40% {
+    opacity: 0.82;
+  }
+  55% {
+    opacity: 0.94;
+  }
+  70% {
+    opacity: 0.86;
+  }
+}
+
+::selection {
+  background: rgb(201 165 92 / 0.42);
+  color: var(--cream);
+}
+.on-paper ::selection {
+  background: rgb(126 38 54 / 0.22);
+  color: var(--parch-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--brass-hi);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+.on-paper :focus-visible {
+  outline-color: var(--wine);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--brass-lo) transparent;
+}
+
+/* ---- 書体 ---- */
+
+/* 見出しの明朝は字間を少し開けて、仕立ての良さを出す */
+.font-display {
+  letter-spacing: 0.08em;
+  font-weight: 600;
+}
+
+/* 英字の小見出し(Cormorant の大文字を広く組む) */
+.eyebrow {
+  font-family: var(--font-latin);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.26em;
+  line-height: 1.4;
+  text-transform: uppercase;
+  color: var(--brass);
+}
+.on-paper .eyebrow,
+.eyebrow-paper {
+  color: var(--parch-accent);
+}
+
+/* 数字は旧式の飾り数字で */
+.numeral {
+  font-family: var(--font-latin);
+  font-variant-numeric: lining-nums tabular-nums;
+  font-weight: 600;
+}
+
+/* 罫線: 二重罫と、中央に菱形を置く飾り罫 */
+.double-rule {
+  height: 4px;
+  border-block: 1px solid currentColor;
+}
+.ornament-rule {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--brass-lo);
+}
+.ornament-rule::before,
+.ornament-rule::after {
+  content: "";
+  height: 1px;
+  flex: 1;
+  background: currentColor;
+}
+
+/* ---- 書類 ---- */
+
+/* 調書の紙: 羊皮紙の地に、焼けと紙の繊維 */
+.dossier {
+  position: relative;
+  color: var(--parch-ink);
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 0%, rgb(255 255 255 / 0.16), transparent 65%),
+    radial-gradient(ellipse 60% 50% at 100% 100%, rgb(120 86 36 / 0.2), transparent 70%),
+    var(--grain-dark),
+    var(--parch);
+  box-shadow: var(--shadow-paper);
+  border-radius: 2px;
+}
+
+/* 新聞の一面: 少し灰色がかった紙 */
+.newsprint {
+  position: relative;
+  color: var(--parch-ink);
+  background:
+    radial-gradient(ellipse 90% 70% at 15% 0%, rgb(255 255 255 / 0.14), transparent 65%),
+    radial-gradient(ellipse 70% 60% at 100% 100%, rgb(90 70 40 / 0.22), transparent 70%),
+    var(--grain-dark),
+    var(--newsprint);
+  box-shadow: var(--shadow-paper);
+  border-radius: 1px;
+}
+
+/* 控えめな受付印(CONFIDENTIAL)。大きく押さない */
+.stamp {
+  display: inline-block;
+  padding: 0.1rem 0.45rem 0.05rem;
+  border: 1.5px solid currentColor;
+  outline: 1px solid currentColor;
+  outline-offset: 1.5px;
+  border-radius: 2px;
+  color: rgb(126 38 54 / 0.78);
+  font-family: var(--font-latin);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  line-height: 1.3;
+  transform: rotate(-4deg);
+  mix-blend-mode: multiply;
+}
+
+/* 写真: 白い縁のプリントをテープで留める。色はセピアに落とす */
+.photo {
+  position: relative;
+  display: inline-block;
+  max-width: min(100%, 26rem);
+  padding: 0.5rem 0.5rem 1.25rem;
+  background: #f3ecd9;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.3), 0 8px 16px -8px rgb(0 0 0 / 0.5);
+  transform: rotate(-0.6deg);
+}
+.photo img {
+  display: block;
+  max-width: 100%;
+  max-height: 15rem;
+  width: auto;
+  filter: sepia(0.85) saturate(0.55) contrast(1.06) brightness(0.95);
+  transition: filter 0.6s ease;
+}
+.photo:hover img {
+  filter: sepia(0.5) saturate(0.8) contrast(1.04);
+}
+.photo::before,
+.photo::after {
+  content: "";
+  position: absolute;
+  top: -0.45rem;
+  width: 3.2rem;
+  height: 1.05rem;
+  background: rgb(222 208 170 / 0.72);
+  box-shadow: 0 1px 1px rgb(0 0 0 / 0.12);
+}
+.photo::before {
+  left: -0.9rem;
+  transform: rotate(-38deg);
+}
+.photo::after {
+  right: -0.9rem;
+  transform: rotate(38deg);
+}
+
+/* 便箋: 薄い横罫。本文と一緒に罫がスクロールする */
+.letter-paper {
+  background-image: linear-gradient(transparent calc(2rem - 1px), rgb(108 79 26 / 0.22) calc(2rem - 1px), rgb(108 79 26 / 0.22) 2rem);
+  background-size: 100% 2rem;
+  background-attachment: local;
+  line-height: 2rem;
+}
+
+/* 切手のミシン目。中身は content-box で残し、縁だけ丸く欠く */
+.postage {
+  padding: 5px;
+  background: var(--parch);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    radial-gradient(circle 2.3px, #0000 96%, #000) -3.5px -3.5px / 7px 7px;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    radial-gradient(circle 2.3px, #0000 96%, #000) -3.5px -3.5px / 7px 7px;
+}
+
+/* 会員証の縁: 真鍮の二重罫 */
+.card-frame {
+  border: 1px solid rgb(201 165 92 / 0.55);
+  outline: 1px solid rgb(201 165 92 / 0.28);
+  outline-offset: 4px;
+}
+
+/* 証書の地紋: 同心円の細線 */
+.guilloche {
+  background-image: repeating-radial-gradient(circle at 110% -10%, transparent 0 6px, rgb(201 165 92 / 0.12) 6px 7px);
+}
+
+/* 夜の地の上の板(革の上に置いた別布) */
+.panel {
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.025), transparent 40%),
+    var(--panel);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  box-shadow: 0 10px 24px -16px rgb(0 0 0 / 0.9);
+}
+
+/* ---- 真鍮の金具 ---- */
+
+/* 真鍮のプレート(選択中のナビ・主ボタン) */
+.plate {
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.28), transparent 45%, rgb(0 0 0 / 0.12)),
+    linear-gradient(100deg, #b38f45, #e3c47c 38%, #c9a55c 62%, #a8843d);
+  color: #1d160b;
+  box-shadow: var(--shadow-plate);
+  border-radius: 2px;
+}
+
+.btn-brass {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  cursor: pointer;
+  transition:
+    box-shadow 0.3s ease,
+    filter 0.3s ease,
+    transform 0.12s ease;
+}
+/* ホバーで光が表面を横切る */
+.btn-brass::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 35%, rgb(255 248 220 / 0.6) 50%, transparent 65%);
+  transform: translateX(-120%);
+  transition: transform 0.8s ease;
+}
+.btn-brass:hover:not(:disabled) {
+  box-shadow: var(--shadow-plate), var(--shadow-glow);
+  filter: brightness(1.08);
+}
+.btn-brass:hover:not(:disabled)::after {
+  transform: translateX(120%);
+}
+/* 押すと金具が沈む */
+.btn-brass:active:not(:disabled) {
+  transform: translateY(2px);
+  filter: brightness(0.94);
+  box-shadow:
+    inset 0 2px 4px rgb(0 0 0 / 0.38),
+    inset 0 -1px 0 rgb(255 255 255 / 0.18),
+    0 0 14px rgb(232 201 127 / 0.22);
+}
+/* 押せないときだけ、くすんだ鉛色の板にする */
+.btn-brass:disabled {
+  background: linear-gradient(180deg, rgb(255 255 255 / 0.12), transparent 50%), #7b776c;
+  color: #2c2a25;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.2),
+    0 1px 2px rgb(0 0 0 / 0.4);
+  cursor: not-allowed;
+}
+.btn-brass:disabled::after {
+  display: none;
+}
+
+/* 夜の地の上の控えめなボタン */
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  border: 1px solid rgb(201 165 92 / 0.45);
+  border-radius: 2px;
+  color: var(--brass-hi);
+  transition:
+    border-color 0.3s ease,
+    background-color 0.3s ease;
+}
+.btn-ghost:hover:not(:disabled) {
+  border-color: var(--brass);
+  background-color: rgb(201 165 92 / 0.08);
+}
+.btn-ghost:disabled {
+  opacity: 0.45;
+}
+
+/* 入力欄(夜の地の上) */
+.field {
+  width: 100%;
+  border: 1px solid var(--rule-hi);
+  border-radius: 2px;
+  background: var(--night-deep);
+  box-shadow: var(--shadow-inset);
+  color: var(--cream);
+  padding: 0.55rem 0.75rem;
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+.field::placeholder {
+  color: rgb(174 167 143 / 0.7);
+}
+.field:focus {
+  outline: none;
+  border-color: var(--brass);
+  box-shadow:
+    var(--shadow-inset),
+    0 0 0 3px rgb(201 165 92 / 0.16);
+}
+
+/* 独自のチェック欄。input.peer の隣に置く */
+.check-box {
+  display: inline-grid;
+  place-items: center;
+  width: 1.1rem;
+  height: 1.1rem;
+  flex-shrink: 0;
+  border: 1.5px solid var(--parch-dim);
+  border-radius: 1px;
+  background: rgb(255 255 255 / 0.25);
+  color: var(--parch-ink);
+  transition: background-color 0.2s ease;
+}
+.check-box svg {
+  opacity: 0;
+  transform: scale(0.6);
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+.peer:checked + .check-box svg {
+  opacity: 1;
+  transform: none;
+}
+.peer:focus-visible + .check-box,
+.peer:focus-visible + .seal-switch {
+  outline: 2px solid var(--wine);
+  outline-offset: 2px;
+}
+.check-box.on-night {
+  border-color: var(--brass);
+  background: var(--night-deep);
+  color: var(--brass-hi);
+}
+.peer:focus-visible + .check-box.on-night {
+  outline-color: var(--brass-hi);
+}
+
+/* 「封をする」の切り替え: 革の帯の上を封蝋が滑る。OFF は左に色の抜けた蝋、ON は右で赤い封蝋が押される */
+.seal-switch {
+  position: relative;
+  display: inline-block;
+  width: 3.1rem;
+  height: 1.6rem;
+  flex-shrink: 0;
+  border: 1px solid var(--parch-rule);
+  border-radius: 9999px;
+  background: rgb(84 70 47 / 0.14);
+  box-shadow: var(--shadow-inset);
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease;
+}
+.seal-switch > svg {
+  position: absolute;
+  top: 50%;
+  left: -0.1rem;
+  width: 1.85rem;
+  height: 1.85rem;
+  translate: 0 -50%;
+  filter: grayscale(1) brightness(1.35) contrast(0.7);
+  opacity: 0.75;
+  transition:
+    left 0.3s cubic-bezier(0.3, 0.8, 0.3, 1),
+    filter 0.3s ease,
+    opacity 0.3s ease;
+}
+.peer:checked + .seal-switch {
+  border-color: rgb(126 38 54 / 0.55);
+  background: rgb(126 38 54 / 0.2);
+}
+.peer:checked + .seal-switch > svg {
+  left: calc(100% - 1.75rem);
+  filter: drop-shadow(0 1px 1px rgb(0 0 0 / 0.35));
+  opacity: 1;
+  animation: seal-press 0.38s cubic-bezier(0.2, 0.9, 0.3, 1.3);
+}
+@keyframes seal-press {
+  0% {
+    scale: 1.35;
+  }
+  60% {
+    scale: 0.92;
+  }
+  100% {
+    scale: 1;
+  }
+}
+
+/* 文字数の目盛り: 刻みの入った細い帯。残りが少ないと真鍮→ワインへ */
+.meter {
+  position: relative;
+  height: 0.4rem;
+  overflow: hidden;
+  border-radius: 9999px;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 calc(10% - 1px), rgb(84 70 47 / 0.35) calc(10% - 1px) 10%),
+    rgb(84 70 47 / 0.16);
+  box-shadow: var(--shadow-inset);
+}
+.meter > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--parch-accent);
+  transition:
+    width 0.3s ease,
+    background-color 0.3s ease;
+}
+.meter[data-level="near"] > span {
+  background: var(--brass-lo);
+}
+.meter[data-level="full"] > span {
+  background: var(--wine);
+}
+
+/* ---- 封筒と封蝋 ---- */
+
+.envelope {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 9.5rem;
+  overflow: hidden;
+  border: 1px solid var(--parch-rule);
+  border-radius: 2px;
+  color: var(--parch-ink);
+  background:
+    linear-gradient(to top right, transparent calc(50% - 0.5px), rgb(108 79 26 / 0.28) 50%, transparent calc(50% + 0.5px)) left bottom / 50% 62% no-repeat,
+    linear-gradient(to top left, transparent calc(50% - 0.5px), rgb(108 79 26 / 0.28) 50%, transparent calc(50% + 0.5px)) right bottom / 50% 62% no-repeat,
+    radial-gradient(ellipse 70% 60% at 50% 100%, rgb(120 86 36 / 0.18), transparent 70%),
+    var(--grain-dark),
+    var(--parch-lo);
+  perspective: 600px;
+  cursor: pointer;
+}
+.envelope-flap {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 58%;
+  transform-origin: top;
+  filter: drop-shadow(0 2px 2px rgb(0 0 0 / 0.25));
+  transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1) 0.25s;
+}
+.envelope-flap::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.2), transparent),
+    var(--grain-dark),
+    var(--parch);
+}
+.envelope-seal {
+  position: absolute;
+  top: 58%;
+  left: 50%;
+  width: 3.6rem;
+  height: 3.6rem;
+  translate: -50% -50%;
+  transition: transform 0.4s ease;
+}
+.envelope:hover .envelope-seal {
+  transform: scale(1.05) rotate(-4deg);
+}
+.seal-half {
+  position: absolute;
+  inset: 0;
+  transition:
+    transform 0.5s cubic-bezier(0.3, 0, 0.3, 1),
+    opacity 0.5s ease 0.15s;
+}
+.seal-half.left {
+  clip-path: polygon(0 0, 53% 0, 46% 28%, 56% 50%, 46% 74%, 52% 100%, 0 100%);
+}
+.seal-half.right {
+  clip-path: polygon(53% 0, 100% 0, 100% 100%, 52% 100%, 46% 74%, 56% 50%, 46% 28%);
+}
+.envelope.is-opening {
+  cursor: default;
+}
+.envelope.is-opening .seal-half.left {
+  transform: translate(-0.9rem, 0.5rem) rotate(-22deg);
+  opacity: 0;
+}
+.envelope.is-opening .seal-half.right {
+  transform: translate(0.9rem, 0.7rem) rotate(18deg);
+  opacity: 0;
+}
+.envelope.is-opening .envelope-flap {
+  transform: rotateX(178deg);
+}
+
+/* ---- 動き(控えめに) ---- */
+
+.fade-in {
+  animation: fade-in 0.6s ease both;
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* 封を開けたあとの中身 */
+.unsealed {
+  animation: unsealed 0.8s ease both;
+}
+@keyframes unsealed {
+  from {
+    opacity: 0;
+    filter: blur(3px);
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    filter: none;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+  }
+}

@@ -1,5 +1,17 @@
 $ErrorActionPreference = 'Stop'
-# Placeholder created by tools/new-project.ps1.
-# Replace this with the real build, test and lint commands once the tech stack is chosen.
-Write-Error 'Verification is not configured yet. Implement scripts/codex-verify.ps1 for this project.'
-exit 1
+Set-Location (Split-Path $PSScriptRoot -Parent)
+
+$steps = @(
+  @{ Name = 'typecheck'; Args = @('run', 'typecheck') },
+  @{ Name = 'lint'; Args = @('run', 'lint') },
+  @{ Name = 'test'; Args = @('test') },
+  @{ Name = 'build'; Args = @('run', 'build') }
+)
+
+foreach ($step in $steps) {
+  Write-Host "== $($step.Name)"
+  & npm.cmd @($step.Args)
+  if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+}
+
+Write-Host 'All checks passed.'
